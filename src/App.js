@@ -1,15 +1,20 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { clickButton, clickButton2,loadListEmployess } from './actions';
+import { clickButton, clickButton2, loadListEmployees } from './actions';
+import  Container  from "@material-ui/core/Container";
+import  Input  from "@material-ui/core/Input";
 import './App.css';
-import { employeeService } from './service';
+import {TableEmployee} from "./component";
+import { Button } from '@material-ui/core';
+
 
 class App extends Component {
 
-  componentWillMount() {
-    this.props.loadListEmployess( employeeService.getAll());
+  componentDidMount() {
+    this.props.loadListEmployees();
   }
+
 
   state = {
     inputValue: ''
@@ -22,53 +27,40 @@ class App extends Component {
   }
 
   render() {
+
+
+
     const {
       clickButton,
       clickButton2,
-      loadListEmployess,
       newValue,
       newValue2,
-      listEmployees = []
+      listEmployees
     } = this.props;
 
     return (
+      <Container maxWidth="md">
       <div className="App" style={{ paddingTop: '10px' }}>
-        <input
-          onChange={this.inputChange}
-          type='text'
-          value={this.state.inputValue}
-        />
-        <button onClick={() => clickButton(this.state.inputValue)}>
-          Click me!
-        </button>
+            <Input
+              onChange={this.inputChange}
+              type='text'
+              value={this.state.inputValue}
+            />
+            <Button variant="contained" color="primary" onClick={() => clickButton(this.state.inputValue)}>
+              Click me!
+            </Button>
 
-        <button onClick={() => clickButton2(this.state.inputValue)}>
-          Click me 2!
-        </button>
-        <h1>{newValue}</h1>
-        <h2>{newValue2}</h2>
+            <Button variant="contained" color="primary" onClick={() => clickButton2(this.state.inputValue)}>
+              Click me 2!
+            </Button>
+            <h1>{newValue}</h1>
+            <h2>{newValue2}</h2>
 
 
-        <table className="table">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">First</th>
-              <th scope="col">Last</th>
-              <th scope="col">email</th>
-            </tr>
-          </thead>
-          <tbody>
-
-          {
-            console.log(listEmployees)
-          }
-            
-
-          </tbody>
-        </table>
+          <TableEmployee listEmployees={listEmployees} />
 
       </div>
+      </Container>
     );
   }
 }
@@ -80,7 +72,6 @@ const mapStateToProps = store => ({
 });
 
 
-const mapDispatchToProps = dispatch =>
-  bindActionCreators({ clickButton,clickButton2,loadListEmployess}, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators({ clickButton, clickButton2, loadListEmployees }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
